@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - '3050:3050'
+      - '3051:3051'
+    environment:
+      - NODE_ENV=production
+      - GLOBAL_PREFIX=v1
+      - API_HOST=0.0.0.0
+      - API_PREFIX=api
+      - API_PORT=3050
+      - API_GATEWAY_PORT=3051
+      - SWAGGER_PREFIX=swagger
+      - APP_NAME=OAR Hub
+      - CORS_ORIGINS=*
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  redis-data:
+
+networks:
+  app-network:
+    driver: bridge
