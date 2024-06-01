@@ -51,3 +51,14 @@ Create a `.env` file with all config variables, then run:
 ```bash
 npm run start:dev
 ```
+
+
+### Docker compose
+For now I don't have ready to use docker image, but you can use docker compose file inside this repository
+```bash
+git clone https://github.com/mishell-trickster/oar-hub.git
+cd oar-hub
+docker-compose up
+```
+
+docker-compose-yml contains 2 service and all needed environment variables, feel free to change something before start.
