@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
@@ -29,14 +29,17 @@ export class ServicesController {
   async getServiceInfoByKey(@Body() serviceInfoRequest: ApiKeyDto): Promise<ServiceInfoResponseDto> {
     const serviceInfo = await this.messageService.callInfo(serviceInfoRequest.apiKey);
     if (!serviceInfo.response) {
-      throw new Error('No response from service');
+      throw new HttpException('No response from service', HttpStatus.GATEWAY_TIMEOUT);
     }
 
     const response = plainToClass(ServiceInfoResponseDto, serviceInfo.response);
     try {
       await validateOrReject(response);
     } catch (errors) {
-      throw new Error(`Validation failed, service answered with wrong format: ${errors}`);
+      throw new HttpException(
+        `Validation failed, service answered with wrong format: ${errors}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
     return response;
   }

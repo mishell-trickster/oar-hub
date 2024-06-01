@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Server, WebSocket } from 'ws';
 
@@ -34,7 +34,7 @@ export class MessageService {
     await this.serverReady;
     const client = this.findServiceSocketByKey(message.apiKey);
     if (!client) {
-      throw new Error(`Service with api Key ${message.apiKey} not found or disconnected`);
+      throw new HttpException(`Service with api Key ${message.apiKey} not found or disconnected`, HttpStatus.OK);
     }
 
     try {
@@ -57,7 +57,7 @@ export class MessageService {
   public async callStatus(apiKey: string, id: string): Promise<MessageDto> {
     const message = await this.redisService.getMessage(apiKey, id);
     if (!message) {
-      throw new Error(`Message with id ${id} not found in HUB`);
+      throw new HttpException(`Message with id ${id} not found in HUB`, HttpStatus.OK);
     }
     return message;
   }
@@ -111,7 +111,7 @@ export class MessageService {
     const socket = this.findServiceSocketByKey(apiKey);
 
     if (!socket) {
-      throw new Error(`Service with api key ${apiKey} not found or disconnected`);
+      throw new HttpException(`Service with api key ${apiKey} not found or disconnected`, HttpStatus.OK);
     }
     socket.send(JSON.stringify(message));
   }
@@ -129,7 +129,7 @@ export class MessageService {
   public rejectMessage(message: MessageDto): void {
     const response = this.pendingResponses.get(message.id);
     if (!response) {
-      throw new Error(`No pending message with ID ${message.id}`);
+      throw new HttpException(`No pending message with ID ${message.id}`, HttpStatus.OK);
     }
 
     response.reject(message);

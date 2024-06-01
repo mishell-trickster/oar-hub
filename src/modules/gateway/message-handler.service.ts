@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { RawData } from 'ws';
@@ -30,7 +30,7 @@ export class MessageHandlerService {
       try {
         await validateOrReject(response);
       } catch (errors) {
-        throw new Error(`Validation failed, service answered with wrong format: ${errors}`);
+        throw new HttpException(`Validation failed, service answered with wrong format: ${errors}`, HttpStatus.OK);
       }
       return response;
     } catch (error) {
