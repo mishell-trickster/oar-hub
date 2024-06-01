@@ -62,3 +62,6 @@ docker-compose up
 ```
 
 docker-compose-yml contains 2 service and all needed environment variables, feel free to change something before start.
+
+### Warning!
+HTTPS - is a must have for this application, because chatGPT requires secure connection.

@@ -34,9 +34,9 @@ export async function bootstrap(): Promise<void> {
   setupSwagger(app, settings);
 
   await app.listen(settings.hosting.port, async () => {
-    const appUrl = `http://${settings.hosting.host}:${settings.hosting.port}/`;
-    const swaggerUrl = `http://${settings.hosting.host}:${settings.hosting.port}/${settings.hosting.swaggerPrefix}`;
-    const swaggerRawUrl = `http://${settings.hosting.host}:${settings.hosting.port}/swagger-json`;
+    const appUrl = `https://${settings.hosting.host}:${settings.hosting.port}/`;
+    const swaggerUrl = `https://${settings.hosting.host}:${settings.hosting.port}/${settings.hosting.swaggerPrefix}`;
+    const swaggerRawUrl = `https://${settings.hosting.host}:${settings.hosting.port}/swagger-json`;
 
     console.info(`Application is running on: ${appUrl}`);
     console.info(`Swagger is running on: ${swaggerUrl}`);
