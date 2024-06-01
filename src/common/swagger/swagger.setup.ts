@@ -10,7 +10,7 @@ export const setupSwagger = (app: INestApplication, settings: SettingsIface): vo
     .setTitle(name)
     .setDescription(description)
     .setVersion(version)
-    .addServer(`https://${settings.hosting.host}:${settings.hosting.port}`)
+    .addServer(`https://${settings.hosting.host}`)
     .addBearerAuth()
     .build();
 
