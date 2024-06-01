@@ -29,6 +29,12 @@ export class GatewayServer {
   private listen(): void {
     this.server.on('connection', (socket, request) => {
       // Check api key, and attach it to socket
+      console.log('request.url', request.url);
+      if (request.url !== '/ws/') {
+        this.logger.error(`Invalid URL: ${request.url}`);
+        socket.close(4000, 'Invalid URL');
+        return;
+      }
       const apiKey = request.headers['api-key'];
       if (!apiKey) {
         this.logger.error('No API key provided');
